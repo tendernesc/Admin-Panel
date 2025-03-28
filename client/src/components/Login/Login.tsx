@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Login.css"; // Дополнительные стили для фонового изображения
-import { cursorTo } from "readline";
+import "./Login.css"; 
 
 const Login: React.FC = () => {
   return (
