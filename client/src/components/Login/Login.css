@@ -1,0 +1,5 @@
+.login-right {
+  background: url("../Login/background.jpg") no-repeat center;
+  background-size: cover;
+  min-height: 100vh;
+}
