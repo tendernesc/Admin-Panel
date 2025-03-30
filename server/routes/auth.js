@@ -3,11 +3,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 
-require("dotenv").config();
+const router = express.Router();
+require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const router = express.Router();
-
+// Регистрация
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -21,6 +21,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// Вход в систему
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -41,6 +42,21 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["id", "name", "email", "status", "createdAt", "lastLogin"],
+      order: [["lastLogin", "DESC"]] // Сортировка по последнему входу
+    });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
+
+
+
 
 

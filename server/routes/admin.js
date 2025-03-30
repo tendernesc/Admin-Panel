@@ -1,9 +1,9 @@
 const express = require("express");
 const { User } = require("../models");
 const { authenticate } = require("../middleware/auth");
-
 const router = express.Router();
 
+// Получение всех пользователей
 router.get("/users", authenticate, async (req, res) => {
   try {
     const users = await User.findAll();
@@ -13,9 +13,10 @@ router.get("/users", authenticate, async (req, res) => {
   }
 });
 
+// Блокировка пользователей
 router.post("/block", authenticate, async (req, res) => {
   try {
-    const { userIds } = req.body;
+    const { userIds } = req.body; // Получаем массив id пользователей для блокировки
     await User.update({ status: "blocked" }, { where: { id: userIds } });
     res.json({ message: "Users blocked" });
   } catch (error) {
@@ -23,6 +24,7 @@ router.post("/block", authenticate, async (req, res) => {
   }
 });
 
+// Разблокировка пользователей
 router.post("/unblock", authenticate, async (req, res) => {
   try {
     const { userIds } = req.body;
@@ -33,9 +35,14 @@ router.post("/unblock", authenticate, async (req, res) => {
   }
 });
 
+// Удаление пользователей
 router.post("/delete", authenticate, async (req, res) => {
   try {
     const { userIds } = req.body;
+    if (!userIds || userIds.length === 0) {
+      return res.status(400).json({ error: "No user IDs provided" });
+    }
+
     await User.destroy({ where: { id: userIds } });
     res.json({ message: "Users deleted" });
   } catch (error) {
